@@ -16,9 +16,9 @@ def find_serial_port(hwid):
         if hwid in portinfo.hwid: # must match VID:PID pair (STM32 CDC Device)
             if os.name == "nt": # windows doesn't know the name of the device
                 return portinfo
-            if "crow: telephone line" in portinfo.product: # more precise detection for linux/macos
+            if "iii" in portinfo.product: # more precise detection for linux/macos
                 return portinfo
-    raise DeviceNotFoundError(f"can't find crow device")
+    raise DeviceNotFoundError(f"can't find iii device")
 
 class Crow:
     def __init__(self, serial=None):
@@ -91,18 +91,20 @@ class Crow:
 
     def writefile(self, fname):
         with open(fname) as f:
-            logger.debug(f'opened file: {f}')
+            logger.info(f'opened file: {f}')
             for line in f.readlines():
                 self.writeline(line.rstrip())
                 time.sleep(0.001)
 
     def _upload(self, fname, event, end):
         self.raise_event(event, fname)
-        self.write('^^s')
-        time.sleep(0.2)
+        self.writeline('^^s')
+        time.sleep(0.1)
         self.writefile(fname)
         time.sleep(0.1)
-        self.write(end)
+        self.writeline(end)
+        time.sleep(0.1)
+        self.writeline('^^z')
 
     def execute(self, fname):
         self._upload(fname, 'running', '^^e')
