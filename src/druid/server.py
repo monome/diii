@@ -30,7 +30,7 @@ class DruidServer:
             pass
 
     async def listen(self):
-        self.repl.output(f' <listening at ws://{self.host}:{self.port}>')
+        self.repl.output(f' <listening at ws://{self.host}:{self.port}>\n')
         await websockets.serve(self.handle, self.host, self.port)
 
     async def handle_output(self, websocket, output):

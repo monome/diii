@@ -37,12 +37,9 @@ logger = logging.getLogger(__name__)
 # monkey patch to fix https://github.com/monome/druid/issues/8
 Char.display_mappings['\t'] = '  '
 
-druid_intro = "//// druid. q to quit. h for help\n\n"
+druid_intro = "//// q to quit. h for help.\n\n"
 druid_help = """
  h            this menu
- r            runs previous script that was run with r <filename>
- u            uploads 'sketch.lua'
- r <filename> run <filename>
  u <filename> upload <filename>
  p            print current userscript
  q            quit
@@ -56,7 +53,7 @@ class DruidUi:
             height=1,
             char='/',
             style='class:line',
-            content=FormattedTextControl(text='druid////'),
+            content=FormattedTextControl(text=' iii ////'),
             align=WindowAlign.RIGHT
         )
 
@@ -146,16 +143,10 @@ class UiPage(ABC):
 
 class ReplCompleter(Completer):
     CROW_COMMANDS = {
-        "bootloader": "Reboot into bootloader",
-        "clear": "Clear the saved user script",
-        "first": "Set First as the current script and reboot",
-        "identity": "Show crow's serial number",
-        "kill": "Restart the Lua environment",
-        "print": "Print the current user script",
-        "reset": "Reboot crow",
-        "run": "Send a file to crow and run it",
-        "upload": "Send a file to crow, store and run it",
-        "version": "Print the current firmware version"
+        "clear": "Clear the saved script",
+        "print": "Print the current script",
+        "reset": "Reboot",
+        "upload": "Send a file, store and run it",
     }
 
     def __init__(self):
@@ -200,9 +191,9 @@ class DruidRepl(UiPage):
         self.completer = ReplCompleter()
         super().__init__(ui)
 
-        on_disconnect = lambda exc: self.output(' <crow disconnected>\n')
+        on_disconnect = lambda exc: self.output(' <device disconnected>\n')
         self.handlers = {
-            'connect': [lambda: self.output(' <crow connected>\n')],
+            'connect': [lambda: self.output(' <device connected>\n')],
             'connect_err': [on_disconnect],
             'disconnect': [on_disconnect],
 
@@ -351,7 +342,7 @@ class Druid:
     async def foreground(self, script=None):
         if script is not None:
             if self.crow.is_connected == False:
-                print('no crow device found. exiting.')
+                print('no iii device found. exiting.')
                 return
             self.crow.execute(script)
 
@@ -373,7 +364,7 @@ log_config = {
     'handlers': {
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'druid.log',
+            'filename': 'iii.log',
             'mode': 'w',
             'formatter': 'detailed',
         },
