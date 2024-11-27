@@ -45,7 +45,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "druid=druid.cli:cli",
+            "iii=druid.cli:cli",
         ],
     },
 )
