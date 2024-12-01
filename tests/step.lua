@@ -19,7 +19,7 @@ metro = function(index, count)
 end
 
 grid = function(x,y,z)
-	if z==1 then return end
+	if z==0 then return end
 	if y==0 then
 		-- cut
 	else

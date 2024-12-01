@@ -28,8 +28,8 @@ from prompt_toolkit.widgets import TextArea
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.menus import CompletionsMenu
 
-from druid.crow import Crow
-from druid.server import DruidServer
+from diii.iii import Deviceiii
+from diii.server import DruidServer
 
 
 logger = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 # monkey patch to fix https://github.com/monome/druid/issues/8
 Char.display_mappings['\t'] = '  '
 
-druid_intro = "//// q to quit. h for help.\n\n"
+druid_intro = "  q to quit. h for help.\n\n"
 druid_help = """
  h            this menu
  u <filename> upload <filename>
@@ -51,9 +51,9 @@ class DruidUi:
     def __init__(self, use_theme):
         self.statusbar = Window(
             height=1,
-            char='/',
+            char='─',
             style='class:line',
-            content=FormattedTextControl(text=' iii ////'),
+            content=FormattedTextControl(text=' diii'),
             align=WindowAlign.RIGHT
         )
 
@@ -142,10 +142,10 @@ class UiPage(ABC):
 
 
 class ReplCompleter(Completer):
-    CROW_COMMANDS = {
+    III_COMMANDS = {
         "clear": "Clear the saved script",
         "print": "Print the current script",
-        "reset": "Reboot",
+        "reboot": "Reboot",
         "upload": "Send a file, store and run it",
     }
 
@@ -155,9 +155,9 @@ class ReplCompleter(Completer):
         )
 
         self.word_completer = WordCompleter(
-            words=self.CROW_COMMANDS.keys(),
+            words=self.III_COMMANDS.keys(),
             ignore_case=True,
-            meta_dict=self.CROW_COMMANDS,
+            meta_dict=self.III_COMMANDS,
         )
 
     def offset_document(self, document, offset):
@@ -186,22 +186,22 @@ class ReplCompleter(Completer):
 
 
 class DruidRepl(UiPage):
-    def __init__(self, ui, crow):
-        self.crow = crow
+    def __init__(self, ui, iii):
+        self.iii = iii
         self.completer = ReplCompleter()
         super().__init__(ui)
 
-        on_disconnect = lambda exc: self.output(' <device disconnected>\n')
+        on_disconnect = lambda exc: self.output('  <device disconnected>\n')
         self.handlers = {
-            'connect': [lambda: self.output(' <device connected>\n')],
+            'connect': [lambda: self.output('  <device connected>\n')],
             'connect_err': [on_disconnect],
             'disconnect': [on_disconnect],
 
             'running': [lambda fname: self.output(f'running {fname}\n')],
             'uploading': [lambda fname: self.output(f'uploading {fname}\n')],
 
-            'crow_event': [self.crow_event],
-            'crow_output': [lambda output: self.output(output + '\n')],
+            'iii_event': [self.iii_event],
+            'iii_output': [lambda output: self.output(output + '\n')],
         }
 
     def build_ui(self):
@@ -236,7 +236,7 @@ class DruidRepl(UiPage):
         ])
 
     def mount(self):
-        self.crow.replace_handlers(self.handlers)
+        self.iii.replace_handlers(self.handlers)
         super().mount()
         pgup = lambda evt: self.pageup(evt, self.output_field)
         pgdn = lambda evt: self.pagedown(evt, self.output_field)
@@ -259,8 +259,8 @@ class DruidRepl(UiPage):
         if len(parts) == 0:
             return
         c = parts[0]
-        if c == 'r' or c == 'u':
-            run_func = self.crow.upload if c == 'u' else self.crow.execute
+        if c == 'u':
+            run_func = self.iii.upload
             global last_script
             if len(parts) == 1:
                 if len(last_script) == 0:
@@ -271,21 +271,21 @@ class DruidRepl(UiPage):
                 last_script = parts[1]
                 run_func(parts[1])
             else:
-                self.crow.writeline(cmd)
+                self.iii.writeline(cmd)
         elif len(parts) == 1:
             if c == 'q':
                 print('bye.')
                 get_app().exit()
             elif c == 'p':
-                self.crow.write('^^p')
+                self.iii.write('^^p')
             elif c == 'h':
                 self.output(druid_help)
             else:
-                self.crow.writeline(cmd)
+                self.iii.writeline(cmd)
         else:
-            self.crow.writeline(cmd)
+            self.iii.writeline(cmd)
 
-    def crow_event(self, line, event, args):
+    def iii_event(self, line, event, args):
         if event == 'stream' or event == 'change':
             ch_str, val = args
             ch = int(ch_str)
@@ -331,25 +331,25 @@ class DruidRepl(UiPage):
 
 
 class Druid:
-    def __init__(self, crow, use_theme):
-        self.crow = crow
+    def __init__(self, iii, use_theme):
+        self.iii = iii
         self.ui = DruidUi(use_theme)
-        self.repl = DruidRepl(ui=self.ui, crow=crow)
+        self.repl = DruidRepl(ui=self.ui, iii=iii)
 
         self.ui.add_page('repl', self.repl)
         self.ui.set_page('repl')
 
     async def foreground(self, script=None):
         if script is not None:
-            if self.crow.is_connected == False:
+            if self.iii.is_connected == False:
                 print('no iii device found. exiting.')
                 return
-            self.crow.execute(script)
+            self.iii.execute(script)
 
         return await self.ui.app.run_async()
 
     async def background(self):
-        await self.crow.read_forever()
+        await self.iii.read_forever()
 
 
 log_config = {
@@ -373,7 +373,7 @@ log_config = {
         'druid.repl': {
             'handlers': ['file'],
         },
-        'druid.crow': {
+        'druid.iii': {
             'handlers': ['file'],
         },
     },
@@ -392,11 +392,11 @@ def main(script=None, use_theme=True):
     loop = asyncio.get_event_loop()
     use_asyncio_event_loop()
     with patch_stdout():
-        with Crow() as crow:
-            shell = Druid(crow, use_theme)
+        with Deviceiii() as iii:
+            shell = Druid(iii, use_theme)
 
             server = DruidServer(shell.repl, 'localhost', 6666)
-            crow.reconnect(err_event=True)
+            iii.reconnect(err_event=True)
             background_task = asyncio.gather(
                 shell.background(),
                 server.listen(),

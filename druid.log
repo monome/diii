@@ -1,3 +1,0 @@
-2024-11-11 14:57:25,028 druid.crow      INFO    MainProcess connected to crow on /dev/ttyACM0
-2024-11-11 15:01:15,154 druid.crow      ERROR   MainProcess lost connection: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
-2024-11-11 15:58:31,333 druid.crow      INFO    MainProcess connected to crow on /dev/ttyACM1

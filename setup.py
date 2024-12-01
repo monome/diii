@@ -5,11 +5,11 @@ with open("README.md") as readme:
     long_description = readme.read()
 
 setup(
-    name="monome-druid",
-    description="Terminal interface for crow",
+    name="monome-diii",
+    description="Terminal interface for iii devices",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/monome/druid",
+    url="https://github.com/monome/diii",
     author="monome",
     author_email="bcrabtree@monome.org",
     classifiers=[
@@ -45,7 +45,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "iii=druid.cli:cli",
+            "diii=diii.cli:cli",
         ],
     },
 )
