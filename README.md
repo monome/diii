@@ -1,6 +1,6 @@
-# druid
+# diii
 
-A basic REPL for crow with some utilities
+A basic REPL for iii devices
 
 ## Setup
 
@@ -15,40 +15,36 @@ Note: you might need to use `python` and `pip` instead of `python3` and `pip3` d
 
 Install and run:
 ```bash
-# Install druid
-pip3 install monome-druid
-# Run druid :)
-druid
+# Install diii
+pip3 install monome-diii
+# Run diii :)
+diii
 ```
 
-## Druid
+## diii
 
-Start by running `druid`
+Start by running `diii`
 
 - type q (enter) to quit.
 - type h (enter) for a list of special commands.
 
-- input values are printed on the top line
-- will reconnect to crow after a disconnect / restart
+- will reconnect to device after a disconnect / restart
 - scrollable console history
 
 Example:
 
 ```
-druid
-//// druid. q to quit. h for help
+  q to quit. h for help
 
 > x=6
 
 > print(x)
 6
 
-> output[1].volts = 0
-
 > q
 ```
 
-Diagnostic logs are written to `druid.log`.
+Diagnostic logs are written to `diii.log`.
 
 ## Command Line Interface
 
@@ -57,19 +53,16 @@ Sometimes you don't need the repl, but just want to upload/download scripts to/f
 ### Upload
 
 ```
-druid upload cool_script.lua
+diii upload script.lua
 ```
 
-Uploads the provided lua file, `cool_script.lua`, to crow & stores it in flash to be executed on boot.
+Uploads the provided lua file `script.lua` to device and stores it in flash to be executed on boot.
 
 ### Download
 
 ```
-druid download > feathers.lua
+diii download > feathers.lua
 ```
 
 Grabs the script currently stored on crow, and pastes the result into a new file `feathers.lua`.
 
-## Bowery
-
-For a collection of `druid` scripts, see the community-contributed collection ['bowery'](https://github.com/monome/bowery). They're a great place to start if you're looking to customize or build your own scripts.

@@ -3,7 +3,7 @@ import websockets
 from websockets.exceptions import ConnectionClosedError
 
 
-class DruidServer:
+class DiiiServer:
 
     def __init__(self, repl, host, port):
         self.repl = repl

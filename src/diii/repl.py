@@ -1,4 +1,4 @@
-""" Druid REPL """
+""" diii """
 # pylint: disable=C0103
 from abc import ABC, abstractmethod
 import asyncio
@@ -29,7 +29,7 @@ from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.menus import CompletionsMenu
 
 from diii.iii import Deviceiii
-from diii.server import DruidServer
+from diii.server import DiiiServer
 
 
 logger = logging.getLogger(__name__)
@@ -37,8 +37,8 @@ logger = logging.getLogger(__name__)
 # monkey patch to fix https://github.com/monome/druid/issues/8
 Char.display_mappings['\t'] = '  '
 
-druid_intro = "  q to quit. h for help.\n\n"
-druid_help = """
+diii_intro = "  q to quit. h for help.\n\n"
+diii_help = """
  h            this menu
  u <filename> upload <filename>
  p            print current userscript
@@ -47,7 +47,7 @@ druid_help = """
 
 last_script = ''
 
-class DruidUi:
+class DiiiUi:
     def __init__(self, use_theme):
         self.statusbar = Window(
             height=1,
@@ -76,7 +76,7 @@ class DruidUi:
 
         @self.key_bindings.add('c-c', eager=True)
         @self.key_bindings.add('c-q', eager=True)
-        def quit_druid(event):
+        def quit_diii(event):
             event.app.exit()
 
         if use_theme:
@@ -185,7 +185,7 @@ class ReplCompleter(Completer):
             yield from self.path_completer.get_completions(new_document, complete_event)
 
 
-class DruidRepl(UiPage):
+class DiiiRepl(UiPage):
     def __init__(self, ui, iii):
         self.iii = iii
         self.completer = ReplCompleter()
@@ -211,7 +211,7 @@ class DruidRepl(UiPage):
         ]
         self.output_field = TextArea(
             style='class:output-field',
-            text=druid_intro,
+            text=diii_intro,
             scrollbar=True,
         )
         self.output_field.window.right_margins[0].display_arrows = to_filter(False)
@@ -264,7 +264,7 @@ class DruidRepl(UiPage):
             global last_script
             if len(parts) == 1:
                 if len(last_script) == 0:
-                    self.output('call r <filename> to run a script.')
+                    self.output('  u <filename> to upload script')
                 else:
                     run_func(last_script)
             elif len(parts) == 2 and os.path.isfile(parts[1]):
@@ -279,7 +279,7 @@ class DruidRepl(UiPage):
             elif c == 'p':
                 self.iii.write('^^p')
             elif c == 'h':
-                self.output(druid_help)
+                self.output(diii_help)
             else:
                 self.iii.writeline(cmd)
         else:
@@ -330,11 +330,11 @@ class DruidRepl(UiPage):
             )
 
 
-class Druid:
+class Diii:
     def __init__(self, iii, use_theme):
         self.iii = iii
-        self.ui = DruidUi(use_theme)
-        self.repl = DruidRepl(ui=self.ui, iii=iii)
+        self.ui = DiiiUi(use_theme)
+        self.repl = DiiiRepl(ui=self.ui, iii=iii)
 
         self.ui.add_page('repl', self.repl)
         self.ui.set_page('repl')
@@ -370,10 +370,10 @@ log_config = {
         },
     },
     'loggers': {
-        'druid.repl': {
+        'diii.repl': {
             'handlers': ['file'],
         },
-        'druid.iii': {
+        'diii.iii': {
             'handlers': ['file'],
         },
     },
@@ -393,9 +393,9 @@ def main(script=None, use_theme=True):
     use_asyncio_event_loop()
     with patch_stdout():
         with Deviceiii() as iii:
-            shell = Druid(iii, use_theme)
+            shell = Diii(iii, use_theme)
 
-            server = DruidServer(shell.repl, 'localhost', 6666)
+            server = DiiiServer(shell.repl, 'localhost', 6666)
             iii.reconnect(err_event=True)
             background_task = asyncio.gather(
                 shell.background(),
