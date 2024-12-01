@@ -41,7 +41,8 @@ diii_intro = "  q to quit. h for help.\n\n"
 diii_help = """
  h            this menu
  u <filename> upload <filename>
- p            print current userscript
+ u            upload previous file
+ p            print current script
  q            quit
 """
 
@@ -277,7 +278,7 @@ class DiiiRepl(UiPage):
                 print('bye.')
                 get_app().exit()
             elif c == 'p':
-                self.iii.write('^^p')
+                self.iii.writeline('^^p')
             elif c == 'h':
                 self.output(diii_help)
             else:
