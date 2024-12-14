@@ -2,6 +2,8 @@
 
 A basic REPL for iii devices
 
+A fork of [druid](https://github.com/monome/druid) (which is for [crow](https://github.com/monome/crow))
+
 ## Setup
 
 Requirements:
