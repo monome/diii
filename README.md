@@ -50,7 +50,7 @@ Diagnostic logs are written to `diii.log`.
 
 ## Command Line Interface
 
-Sometimes you don't need the repl, but just want to upload/download scripts to/from crow. You can do so directly from the command line with the `upload` and `download` commands.
+Sometimes you don't need the repl, but just want to upload/download scripts to/from device. You can do so directly from the command line with the `upload` and `download` commands.
 
 ### Upload
 
@@ -66,5 +66,5 @@ Uploads the provided lua file `script.lua` to device and stores it in flash to b
 diii download > feathers.lua
 ```
 
-Grabs the script currently stored on crow, and pastes the result into a new file `feathers.lua`.
+Grabs the script currently stored on device, and pastes the result into a new file `feathers.lua`.
 
