@@ -34,6 +34,8 @@ diii
 
 ## Package Update
 
+https://packaging.python.org/en/latest/tutorials/packaging-projects/
+
 - pypi.org account, get token for __token__ entry
 
 ```
