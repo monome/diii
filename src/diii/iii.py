@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def find_serial_port(hwid):
     for portinfo in serial.tools.list_ports.comports():
-        if hwid in portinfo.hwid: # must match VID:PID pair (STM32 CDC Device)
+        if hwid in portinfo.hwid: # must match VID:PID
             if os.name == "nt": # windows doesn't know the name of the device
                 return portinfo
             if "iii" in portinfo.product: # more precise detection for linux/macos
@@ -27,7 +27,7 @@ class Deviceiii:
         self.event_handlers = {}
 
     def find_device(self):
-        portinfo = find_serial_port('USB VID:PID=0483:5740')
+        portinfo = find_serial_port('USB VID:PID=CAFE:1101')
         try:
             return serial.Serial(
                 portinfo.device,
