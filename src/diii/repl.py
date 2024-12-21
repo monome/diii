@@ -365,7 +365,7 @@ log_config = {
     'handlers': {
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'iii.log',
+            'filename': 'diii.log',
             'mode': 'w',
             'formatter': 'detailed',
         },
