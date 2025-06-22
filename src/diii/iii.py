@@ -87,7 +87,7 @@ class Deviceiii:
         self.writebin(s.encode('utf-8'))
 
     def writeline(self, line):
-        self.write(line + '\r\n')
+        self.write(line + '\n')
 
     def writefile(self, fname):
         with open(fname) as f:
@@ -104,7 +104,7 @@ class Deviceiii:
         time.sleep(0.1)
         self.writeline(end)
         time.sleep(0.1)
-        self.writeline('^^z')
+        self.writeline('^^i')
 
     def execute(self, fname):
         self._upload(fname, 'running', '^^e')
@@ -127,7 +127,7 @@ class Deviceiii:
             try:
                 r = self.read(10000)
                 if len(r) > 0:
-                    lines = r.split('\n\r')
+                    lines = r.split('\n')
                     for line in lines:
                         self.process_line(line)
             except Exception as exc:
