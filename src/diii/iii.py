@@ -96,21 +96,21 @@ class Deviceiii:
                 self.writeline(line.rstrip())
                 time.sleep(0.001)
 
-    def _upload(self, fname, event, end):
-        self.raise_event(event, fname)
+
+    def upload(self, fname):
+        self.raise_event('uploading', fname)
+        self.writeline('^^s')
+        time.sleep(0.1)
+        self.writeline(os.path.basename(fname))
+        time.sleep(0.1)
+        self.writeline('^^f')
+        time.sleep(0.1)
         self.writeline('^^s')
         time.sleep(0.1)
         self.writefile(fname)
         time.sleep(0.1)
-        self.writeline(end)
+        self.writeline('^^w')
         time.sleep(0.1)
-        self.writeline('^^i')
-
-    def execute(self, fname):
-        self._upload(fname, 'running', '^^e')
-
-    def upload(self, fname):
-        self._upload(fname, 'uploading', '^^w')
 
     def readbin(self, count):
         b = self.serial.read(count)

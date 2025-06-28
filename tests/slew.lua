@@ -1,3 +1,5 @@
+print('slew!')
+
 slew.init()
 
 test = function()
@@ -15,7 +17,7 @@ end
 
 sl = {}
 
-grid = function(x,y,z)
+event_grid = function(x,y,z)
 	if z==1 then
 		print(x)
 		if(sl[y]) then slew.stop(sl[y]) end
