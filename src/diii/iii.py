@@ -87,7 +87,7 @@ class Deviceiii:
         self.writebin(s.encode('utf-8'))
 
     def writeline(self, line):
-        self.write(line + '\r\n')
+        self.write(line + '\n')
 
     def writefile(self, fname):
         with open(fname) as f:
@@ -96,21 +96,21 @@ class Deviceiii:
                 self.writeline(line.rstrip())
                 time.sleep(0.001)
 
-    def _upload(self, fname, event, end):
-        self.raise_event(event, fname)
+
+    def upload(self, fname):
+        self.raise_event('uploading', fname)
+        self.writeline('^^s')
+        time.sleep(0.1)
+        self.writeline(os.path.basename(fname))
+        time.sleep(0.1)
+        self.writeline('^^f')
+        time.sleep(0.1)
         self.writeline('^^s')
         time.sleep(0.1)
         self.writefile(fname)
         time.sleep(0.1)
-        self.writeline(end)
+        self.writeline('^^w')
         time.sleep(0.1)
-        self.writeline('^^z')
-
-    def execute(self, fname):
-        self._upload(fname, 'running', '^^e')
-
-    def upload(self, fname):
-        self._upload(fname, 'uploading', '^^w')
 
     def readbin(self, count):
         b = self.serial.read(count)
@@ -127,7 +127,7 @@ class Deviceiii:
             try:
                 r = self.read(10000)
                 if len(r) > 0:
-                    lines = r.split('\n\r')
+                    lines = r.split('\n')
                     for line in lines:
                         self.process_line(line)
             except Exception as exc:
