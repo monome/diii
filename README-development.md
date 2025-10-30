@@ -34,6 +34,8 @@ diii
 
 ## Package Update
 
+- set a git tag. use v0.0.0 for stable, v0.0.0b2 for pre-release (installed with --pre)
+
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
 
 - pypi.org account, get token for __token__ entry
