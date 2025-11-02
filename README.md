@@ -1,8 +1,22 @@
 # diii
 
-A basic REPL for iii devices
+A basic REPL for [iii](https://monome.org/docs/iii/) devices
 
 A fork of [druid](https://github.com/monome/druid) (which is for [crow](https://github.com/monome/crow))
+
+## v1.1.0 beta
+
+To get the pre-release beta:
+
+```
+pip3 install monome-diii --pre
+```
+
+To see your current version:
+
+```
+diii --version
+```
 
 ## Setup
 
@@ -15,11 +29,12 @@ Requirements:
 
 Note: you might need to use `python` and `pip` instead of `python3` and `pip3` depending on your platform. If `python3` is not found, check that you have python >= 3.6 with `python --version`.
 
-Install and run:
+Install:
 ```bash
-# Install diii
 pip3 install monome-diii
-# Run diii :)
+
+Run:
+```
 diii
 ```
 
@@ -50,7 +65,15 @@ Diagnostic logs are written to `diii.log`.
 
 ## Command Line Interface
 
-Sometimes you don't need the repl, but just want to upload/download scripts to/from device. You can do so directly from the command line with the `upload` and `download` commands.
+Sometimes you don't need the repl, but just want to upload/download scripts to/from device. You can do so directly from the command line with the `list`, `upload` and `download` commands.
+
+### List
+
+```
+diii list
+```
+
+Lists files currently on device.
 
 ### Upload
 
@@ -58,13 +81,17 @@ Sometimes you don't need the repl, but just want to upload/download scripts to/f
 diii upload script.lua
 ```
 
-Uploads the provided lua file `script.lua` to device and stores it in flash to be executed on boot.
+Uploads the provided lua file `script.lua` to device and stores it in flash.
 
 ### Download
 
 ```
-diii download > feathers.lua
+diii download script.lua
 ```
 
-Grabs the script currently stored on device, and pastes the result into a new file `feathers.lua`.
+Prints the file `script.lua` which is on the device, if it exists. If you'd like to save the file to the local disk, do this:
+
+```
+diii download script.lua > script.lua
+```
 
