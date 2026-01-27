@@ -21,6 +21,15 @@ def cli(ctx):
     if ctx.invoked_subcommand is None:
         ctx.invoke(repl)
 
+@cli.command(short_help="Run bootloader")
+def bootloader():
+    """
+    Run bootloader
+    """
+    with Deviceiii() as iii:
+        iii.connect()
+        iii.writeline('^^b')
+
 @cli.command(short_help="List files on device")
 def list():
     """
@@ -31,6 +40,19 @@ def list():
         iii.writeline('for _,x in pairs(fs_list_files()) do print(x) end')
         time.sleep(0.3)
         click.echo(iii.read(1000000))
+
+@cli.command(short_help="Do command")
+@click.argument("cmd")
+def do(cmd):
+    """
+    Do command
+    """
+    with Deviceiii() as iii:
+        iii.connect()
+        iii.writeline(cmd)
+        time.sleep(0.3)
+        click.echo(iii.read(1000000))
+
 
 @cli.command(short_help="Download a file from device")
 @click.argument("filename")
