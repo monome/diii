@@ -38,13 +38,21 @@ Run:
 diii
 ```
 
+If you have issues with permissions on Mac OS X Sequoia, try:
+
+```bash
+pipx install monome-diii
+```
+
+
 ## diii
 
-Start by running `diii`
+Start by running `diii` 
+
+Note: arc needs to be in iii mode when plugged into computer for diii to connect.
 
 - type q (enter) to quit.
 - type h (enter) for a list of special commands.
-
 - will reconnect to device after a disconnect / restart
 - scrollable console history
 
