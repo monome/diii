@@ -4,43 +4,30 @@ A basic REPL for [iii](https://monome.org/docs/iii/) devices
 
 A fork of [druid](https://github.com/monome/druid) (which is for [crow](https://github.com/monome/crow))
 
-## v1.1.0 beta
-
-To get the pre-release beta:
-
-```
-pip3 install monome-diii --pre
-```
-
-To see your current version:
-
-```
-diii --version
-```
 
 ## Setup
 
-Requirements:
-- Python 3.6+
-  - Windows & OS X: https://www.python.org/downloads/
-  - Linux: `sudo apt-get install python3 python3-pip` or equivalent
-- `pip` and `setuptools`
-- `pyserial` and `prompt_toolkit`
+`diii` requires Python v3.13
 
-Note: you might need to use `python` and `pip` instead of `python3` and `pip3` depending on your platform. If `python3` is not found, check that you have python >= 3.6 with `python --version`.
+Install [uv](https://docs.astral.sh/uv/#installation), a Python project manager.
 
-Install:
-```bash
-pip3 install monome-diii
+Using the command line, navigate to the folder where you want to install `diii`:
 
-Run:
+```
+mkdir ~/diii
+cd ~/diii
+uv venv --python 3.13
+source .venv/bin/activate
+uv pip install monome-diii
+```
+
+And then to run diii
+
 ```
 diii
 ```
 
 ## diii
-
-Start by running `diii`
 
 - type q (enter) to quit.
 - type h (enter) for a list of special commands.
