@@ -7,8 +7,6 @@ A fork of [druid](https://github.com/monome/druid) (which is for [crow](https://
 
 ## Setup
 
-`diii` requires Python v3.13
-
 Install [uv](https://docs.astral.sh/uv/#installation), a Python project manager.
 
 Using the command line, navigate to the folder where you want to install `diii`:
@@ -16,7 +14,7 @@ Using the command line, navigate to the folder where you want to install `diii`:
 ```
 mkdir ~/diii
 cd ~/diii
-uv venv --python 3.13
+uv venv
 source .venv/bin/activate
 uv pip install monome-diii
 ```
